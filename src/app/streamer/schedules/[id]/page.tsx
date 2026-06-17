@@ -4,6 +4,7 @@ import { getScheduleById, getSaleByScheduleId } from "@/lib/db";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
+import NumberInput from "@/components/ui/NumberInput";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/Badge";
 import { formatDate, formatTimeRange } from "@/lib/format";
@@ -53,20 +54,16 @@ export default async function StreamerScheduleDetailPage({
       </Card>
 
       <Card>
-        <form action={submitSalesAction} className="space-y-4">
+        <form action={submitSalesAction} className="space-y-4" encType="multipart/form-data">
           <input type="hidden" name="schedule_id" value={schedule.id} />
           {error === "invalid" && (
             <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">Jumlah sales tidak valid</p>
           )}
-          <Input
+          <NumberInput
             label="Total Sales (Rp)"
             name="amount"
-            type="number"
-            inputMode="numeric"
-            min="0"
-            step="1000"
-            placeholder="500000"
             defaultValue={existingSale?.amount ?? ""}
+            placeholder="500000"
             required
           />
           <Input
@@ -84,6 +81,16 @@ export default async function StreamerScheduleDetailPage({
             placeholder="Produk terlaris, kendala, dll."
             defaultValue={existingSale?.notes ?? ""}
           />
+          {existingSale?.screenshot && (
+            <div>
+              <p className="text-xs text-zinc-400">Bukti saat ini</p>
+              <img src={`/${existingSale.screenshot}`} alt="screenshot" className="mt-2 max-h-40 rounded-md object-contain" />
+            </div>
+          )}
+          <div>
+            <label className="block text-sm font-medium text-zinc-700">Screenshot Bukti (opsional)</label>
+            <input type="file" name="screenshot" accept="image/*" className="mt-2" />
+          </div>
           <Button type="submit" className="w-full">
             {existingSale ? "Perbarui Sales" : "Kirim Sales"}
           </Button>

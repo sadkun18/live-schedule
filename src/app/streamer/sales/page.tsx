@@ -4,6 +4,8 @@ import { getSales } from "@/lib/db";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
 import { Card } from "@/components/ui/Card";
 import { formatCurrency, formatDateShort } from "@/lib/format";
+import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 
 export default async function StreamerSalesPage() {
   const session = await getSession();
@@ -15,7 +17,12 @@ export default async function StreamerSalesPage() {
 
   return (
     <AppShell role="streamer">
-      <PageHeader title="Riwayat Sales" subtitle="Semua laporan sales Anda" />
+      <div className="mb-4 flex items-center justify-between">
+        <PageHeader title="Riwayat Sales" subtitle="Semua laporan sales Anda" />
+        <Link href="/streamer/sales/input">
+          <Button variant="ghost">Input Sales</Button>
+        </Link>
+      </div>
 
       <div className="mb-6 grid grid-cols-2 gap-3">
         <Card>
@@ -44,7 +51,13 @@ export default async function StreamerSalesPage() {
                   <p className="text-xs text-zinc-500">{s.order_count} pesanan</p>
                 </div>
               </div>
-              {s.notes && <p className="mt-2 text-sm text-zinc-500">{s.notes}</p>}
+                {s.notes && <p className="mt-2 text-sm text-zinc-500">{s.notes}</p>}
+                {s.screenshot && (
+                  <div className="mt-3">
+                    <p className="text-xs text-zinc-400 mb-1">Bukti</p>
+                    <img src={`/${s.screenshot}`} alt="screenshot" className="max-h-40 rounded-md object-contain" />
+                  </div>
+                )}
             </Card>
           ))
         )}

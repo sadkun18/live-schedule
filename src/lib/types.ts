@@ -28,6 +28,7 @@ export interface Sale {
   amount: number;
   order_count: number;
   notes: string | null;
+  screenshot?: string | null;
   submitted_at: string;
 }
 

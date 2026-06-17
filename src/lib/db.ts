@@ -55,6 +55,17 @@ function initSchema(database: Database.Database) {
     );
   `);
 
+  // Ensure `screenshot` column exists in `sales` table for uploaded images
+  try {
+    const cols = database.prepare("PRAGMA table_info('sales')").all() as Array<{ name: string }>;
+    const hasScreenshot = cols.some((c) => c.name === "screenshot");
+    if (!hasScreenshot) {
+      database.prepare("ALTER TABLE sales ADD COLUMN screenshot TEXT").run();
+    }
+  } catch (err) {
+    // ignore alter errors
+  }
+
   const count = database.prepare("SELECT COUNT(*) as c FROM streamers").get() as { c: number };
   if (count.c === 0) seedData(database);
 }
@@ -289,25 +300,26 @@ export function upsertSale(data: {
   amount: number;
   order_count: number;
   notes?: string;
+  screenshot?: string | null;
 }): Sale {
   const existing = getSaleByScheduleId(data.schedule_id);
   if (existing) {
     getDb()
       .prepare(
-        `UPDATE sales SET amount = ?, order_count = ?, notes = ?, submitted_at = datetime('now')
+        `UPDATE sales SET amount = ?, order_count = ?, notes = ?, screenshot = ?, submitted_at = datetime('now')
          WHERE schedule_id = ?`
       )
-      .run(data.amount, data.order_count, data.notes ?? null, data.schedule_id);
+      .run(data.amount, data.order_count, data.notes ?? null, data.screenshot ?? null, data.schedule_id);
     updateSchedule(data.schedule_id, { status: "completed" });
     return getSaleByScheduleId(data.schedule_id)!;
   }
 
   const result = getDb()
     .prepare(
-      `INSERT INTO sales (schedule_id, streamer_id, amount, order_count, notes)
-       VALUES (?, ?, ?, ?, ?)`
+      `INSERT INTO sales (schedule_id, streamer_id, amount, order_count, notes, screenshot)
+       VALUES (?, ?, ?, ?, ?, ?)`
     )
-    .run(data.schedule_id, data.streamer_id, data.amount, data.order_count, data.notes ?? null);
+    .run(data.schedule_id, data.streamer_id, data.amount, data.order_count, data.notes ?? null, data.screenshot ?? null);
   updateSchedule(data.schedule_id, { status: "completed" });
   return getDb().prepare("SELECT * FROM sales WHERE id = ?").get(result.lastInsertRowid) as Sale;
 }

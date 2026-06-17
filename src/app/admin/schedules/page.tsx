@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { PLATFORMS } from "@/lib/types";
 import { createScheduleAction, deleteScheduleAction, updateScheduleAction } from "../actions";
+import CreateScheduleModalToggle from "@/components/CreateScheduleModalToggle";
 import { toDatetimeLocalValue } from "@/lib/format";
 import { Trash2 } from "lucide-react";
 
@@ -29,38 +30,54 @@ export default async function SchedulesPage() {
     <AppShell role="admin">
       <PageHeader title="Jadwal Live" subtitle="Atur jadwal streaming semua streamer" />
 
-      <Card className="mb-6 space-y-4">
-        <h2 className="font-semibold text-zinc-900">Buat Jadwal Baru</h2>
-        <form action={createScheduleAction} className="space-y-3">
-          <Input label="Judul Live" name="title" placeholder="Flash Sale, New Arrival, dll." required />
-          <Select
-            label="Streamer"
-            name="streamer_id"
-            options={streamers.map((s) => ({ value: s.id, label: s.name }))}
-          />
-          <Select
-            label="Platform"
-            name="platform"
-            options={PLATFORMS.map((p) => ({ value: p, label: p }))}
-          />
-          <Input
-            label="Mulai"
-            name="start_at"
-            type="datetime-local"
-            defaultValue={toDatetimeLocalValue(defaultStart.toISOString())}
-            required
-          />
-          <Input
-            label="Selesai"
-            name="end_at"
-            type="datetime-local"
-            defaultValue={toDatetimeLocalValue(defaultEnd.toISOString())}
-            required
-          />
-          <Input label="Catatan (opsional)" name="notes" placeholder="Produk fokus, promo, dll." />
-          <Button type="submit" className="w-full">Buat Jadwal</Button>
-        </form>
-      </Card>
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-zinc-900">Jadwal Live</h2>
+        <div>
+          <CreateScheduleModalToggle />
+        </div>
+      </div>
+
+      {/* Modal markup rendered server-side; visibility toggled by client script */}
+      <div id="create-schedule-modal" className="hidden fixed inset-0 z-50 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
+        <div className="relative z-10 w-full max-w-xl rounded-xl bg-white p-6 shadow-lg">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-zinc-900">Buat Jadwal Baru</h2>
+            <button id="close-create-schedule" type="button" className="text-zinc-500">Tutup</button>
+          </div>
+          <div className="mt-4">
+            <form action={createScheduleAction} className="space-y-3">
+              <Input label="Judul Live" name="title" placeholder="Flash Sale, New Arrival, dll." required />
+              <Select
+                label="Streamer"
+                name="streamer_id"
+                options={streamers.map((s) => ({ value: s.id, label: s.name }))}
+              />
+              <Select
+                label="Platform"
+                name="platform"
+                options={PLATFORMS.map((p) => ({ value: p, label: p }))}
+              />
+              <Input
+                label="Mulai"
+                name="start_at"
+                type="datetime-local"
+                defaultValue={toDatetimeLocalValue(defaultStart.toISOString())}
+                required
+              />
+              <Input
+                label="Selesai"
+                name="end_at"
+                type="datetime-local"
+                defaultValue={toDatetimeLocalValue(defaultEnd.toISOString())}
+                required
+              />
+              <Input label="Catatan (opsional)" name="notes" placeholder="Produk fokus, promo, dll." />
+              <Button type="submit" className="w-full">Buat Jadwal</Button>
+            </form>
+          </div>
+        </div>
+      </div>
 
       <div className="space-y-3">
         {schedules.length === 0 ? (
