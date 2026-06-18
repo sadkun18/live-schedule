@@ -4,6 +4,7 @@ import { formatDate, formatTimeRange } from "@/lib/format";
 import type { ScheduleWithStreamer } from "@/lib/types";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { cn } from "@/lib/cn";
 
 export function ScheduleCard({
   schedule,
@@ -43,20 +44,24 @@ export function StatCard({
   value,
   sub,
   icon: Icon,
+  className,
 }: {
   label: string;
   value: string;
   sub?: string;
   icon?: React.ComponentType<{ className?: string }>;
+  className?: string;
 }) {
   return (
-    <Card className="space-y-1">
+    <Card className={cn("space-y-1", className)}>
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium uppercase tracking-wide text-zinc-400">{label}</p>
-        {Icon && <Icon className="h-4 w-4 text-violet-400" />}
+        <p className={cn("text-[10px] font-bold uppercase tracking-wider", className?.includes('text-white') ? "text-white/60" : "text-zinc-400")}>
+          {label}
+        </p>
+        {Icon && <Icon className={cn("h-4 w-4", className?.includes('text-white') ? "text-white/80" : "text-violet-400")} />}
       </div>
-      <p className="text-2xl font-bold text-zinc-900">{value}</p>
-      {sub && <p className="text-xs text-zinc-500">{sub}</p>}
+      <p className="text-xl font-black">{value}</p>
+      {sub && <p className={cn("text-xs", className?.includes('text-white') ? "text-white/60" : "text-zinc-500")}>{sub}</p>}
     </Card>
   );
 }

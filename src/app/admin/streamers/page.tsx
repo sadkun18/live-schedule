@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { PLATFORMS } from "@/lib/types";
-import { createStreamerAction, deleteStreamerAction, updateStreamerAction } from "../actions";
+import { deleteStreamerAction, updateStreamerAction } from "../actions";
+import CreateStreamerModal from "@/components/Streamer/CreateStreamerModal";
 import { Trash2 } from "lucide-react";
 
 export default async function StreamersPage() {
@@ -20,20 +21,10 @@ export default async function StreamersPage() {
     <AppShell role="admin">
       <PageHeader title="Streamer" subtitle="Kelola live streamer & PIN login" />
 
-      <Card className="mb-6 space-y-4">
-        <h2 className="font-semibold text-zinc-900">Tambah Streamer</h2>
-        <form action={createStreamerAction} className="space-y-3">
-          <Input label="Nama" name="name" placeholder="Nama streamer" required />
-          <Input label="PIN Login" name="pin" type="password" inputMode="numeric" placeholder="4 digit" required />
-          <Input label="No. HP" name="phone" type="tel" placeholder="08xxxxxxxxxx" />
-          <Select
-            label="Platform Utama"
-            name="platform"
-            options={PLATFORMS.map((p) => ({ value: p, label: p }))}
-          />
-          <Button type="submit" className="w-full">Tambah Streamer</Button>
-        </form>
-      </Card>
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-zinc-900">Daftar Streamer</h2>
+        <CreateStreamerModal />
+      </div>
 
       <div className="space-y-3">
         {streamers.map((s) => (
