@@ -27,7 +27,7 @@ export default async function StreamerManualSalesPage({ searchParams }: { search
       <PageHeader title="Input Sales Manual" subtitle="Masukkan data sales tanpa jadwal" />
 
       <Card className="mb-6">
-        <form action={submitSalesAction} className="space-y-4" encType="multipart/form-data">
+        <form action={submitSalesAction} className="space-y-4">
           <Input label="Platform" name="platform" placeholder="Shopee Live / TikTok Live" required />
           <Input label="Tanggal" name="date" type="date" required />
           <div className="grid grid-cols-2 gap-3">

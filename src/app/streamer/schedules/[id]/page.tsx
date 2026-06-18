@@ -54,7 +54,7 @@ export default async function StreamerScheduleDetailPage({
       </Card>
 
       <Card>
-        <form action={submitSalesAction} className="space-y-4" encType="multipart/form-data">
+        <form action={submitSalesAction} className="space-y-4">
           <input type="hidden" name="schedule_id" value={schedule.id} />
           {error === "invalid" && (
             <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">Jumlah sales tidak valid</p>

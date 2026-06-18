@@ -7,8 +7,9 @@ export function Card({
   className?: string;
   children: React.ReactNode;
 }) {
+  const hasBg = className?.includes("bg-");
   return (
-    <div className={cn("rounded-2xl border border-zinc-100 bg-white p-4 shadow-sm", className)}>
+    <div className={cn("rounded-2xl border border-zinc-100 p-4 shadow-sm", !hasBg && "bg-white", className)}>
       {children}
     </div>
   );

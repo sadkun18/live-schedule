@@ -32,7 +32,7 @@ export default async function SalesPage({ searchParams }: { searchParams?: { dat
       <div className="flex items-start justify-between">
         <PageHeader title="Laporan Sales" subtitle="Pantau performa live streaming Anda" />
         <Link href={`/api/export-sales${date ? `?date=${date}` : ""}`}>
-          <Button variant="outline" size="sm" className="hidden sm:flex gap-2 rounded-xl border-zinc-200">
+          <Button variant="primary" size="sm" className="hidden sm:flex gap-2 rounded-xl border-zinc-200">
             <Download className="h-4 w-4" /> Export CSV
           </Button>
         </Link>
@@ -69,14 +69,14 @@ export default async function SalesPage({ searchParams }: { searchParams?: { dat
             <div className="flex gap-2">
               <Button type="submit" className="rounded-xl px-6">Terapkan</Button>
               <Link href="/admin/sales">
-                <Button variant="ghost" size="icon" className="rounded-xl border border-zinc-100">
+                <Button variant="ghost" size="md" className="rounded-xl border border-zinc-100">
                   <RotateCcw className="h-4 w-4" />
                 </Button>
               </Link>
             </div>
           </form>
           <Link href={`/api/export-sales${date ? `?date=${date}` : ""}`} className="sm:hidden">
-            <Button variant="outline" className="w-full gap-2 rounded-xl border-zinc-200">
+            <Button variant="primary" className="w-full gap-2 rounded-xl border-zinc-200">
               <Download className="h-4 w-4" /> Export CSV
             </Button>
           </Link>

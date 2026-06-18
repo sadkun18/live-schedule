@@ -46,7 +46,6 @@ export function SalesCard({ sale }: SalesCardProps) {
               </p>
               <p className="text-lg font-black text-green-600">{formatCurrency(sale.amount)}</p>
             </div>
-            <br/>
             <div>
               <p className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
                 <ShoppingBag className="h-3 w-3" />
