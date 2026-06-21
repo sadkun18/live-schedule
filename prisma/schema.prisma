@@ -1,0 +1,61 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Admin {
+  id         Int      @id @default(autoincrement())
+  name       String
+  pin_hash   String
+  created_at DateTime @default(now())
+
+  @@map("admins")
+}
+
+model Streamer {
+  id         Int        @id @default(autoincrement())
+  name       String
+  pin_hash   String
+  phone      String?
+  platform   String     @default("Shopee Live")
+  is_active  Int        @default(1)
+  created_at DateTime   @default(now())
+  schedules  Schedule[]
+  sales      Sale[]
+
+  @@map("streamers")
+}
+
+model Schedule {
+  id          Int      @id @default(autoincrement())
+  streamer_id Int
+  streamer    Streamer @relation(fields: [streamer_id], references: [id], onDelete: Cascade)
+  title       String
+  platform    String
+  start_at    String
+  end_at      String
+  status      String   @default("scheduled")
+  notes       String?
+  created_at  DateTime @default(now())
+  sales       Sale[]
+
+  @@map("schedules")
+}
+
+model Sale {
+  id           Int      @id @default(autoincrement())
+  schedule_id  Int      @unique
+  schedule     Schedule @relation(fields: [schedule_id], references: [id], onDelete: Cascade)
+  streamer_id  Int
+  streamer     Streamer @relation(fields: [streamer_id], references: [id])
+  amount       Float    @default(0)
+  order_count  Int      @default(0)
+  notes        String?
+  screenshot   String?
+  submitted_at DateTime @default(now())
+
+  @@map("sales")
+}
